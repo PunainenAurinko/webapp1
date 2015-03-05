@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     } else {
         //browser does not support geolocation
-        alert("Sorry, but your phone does not support location based awesomeness.")
+        alert("Sorry, but your phone does not support location-based servicess.")
     }
 
 });
@@ -71,9 +71,12 @@ function loadPage(url) {
         for (var i = 0; i < numPages; i++) {
             if (pages[i].id == url) {
                 pages[i].style.display = "block";
+                pages[i].className = "active";
                 history.pushState(null, null, "#" + url);
             } else {
-                pages[i].style.display = "none";
+                pages[i].className = "";
+                pages[i].style.display = "block";
+
             }
         }
         for (var t = 0; t < numLinks; t++) {
@@ -115,15 +118,15 @@ function reportPosition(position) {
     var latitude = position.coords.latitude;
     var longitude = position.coords.longitude;
     var canvas = document.createElement("canvas");
-    canvas.width = 350;
-    canvas.height = 350;
+    canvas.width = 327;
+    canvas.height = 327;
     var output = document.querySelector("#two");
     output.appendChild(canvas);
     var context = canvas.getContext("2d");
     var img = document.createElement("img");
     img.src = "https://maps.googleapis.com/maps/api/staticmap?center=" + latitude + "," + longitude + "&zoom=16&size=400x400&scale=2&maptype=hybrid&language=english&markers=color:white|" + latitude + "," + longitude + "&key=AIzaSyDP68CXSK9TynSN4n_Moo7PPakL8SQM0xk";
     img.onload = function imageDraw() {
-        context.drawImage(img, 0, 0, 350, 350);
+        context.drawImage(img, 0, 0, 327, 327);
     }
     console.log(latitude);
     console.log(longitude);
@@ -142,6 +145,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 
 function onDeviceReady() {
 
+    // Geolocation function call may also be located here
 
     //    if(navigator.geolocation) { 
     //        
@@ -154,6 +158,9 @@ function onDeviceReady() {
     //        alert("Sorry, but your phone does not support location based awesomeness.")
     //    }
     //    
+
+    //  Function to manually pick and display a contact from phone contacts app
+
     //navigator.contacts.pickContact(function(contact){
     //    var output3 = document.querySelector("#three");
     //    var p = document.createElement("p");
@@ -170,12 +177,13 @@ function onDeviceReady() {
     navigator.contacts.find(filter, onSuccess, onError, options);
 }
 
-// onSuccess: Pick a random contact out of all the device contacts
+// onSuccess: Pick and display a random contact out of all device contacts
 
 
 function onSuccess(contacts) {
     console.log(contacts);
-    var r = Math.floor((Math.random() * contacts.length) + 1);
+    var r = Math.floor((Math.random() * contacts.length));
+    console.log("R =" + r);
     //for (var i = 0; i < contacts.length; i++) {
     var output3 = document.querySelector("#three");
     var p = document.createElement("p");
@@ -191,18 +199,22 @@ function onSuccess(contacts) {
         if (contacts[r].phoneNumbers != null) {
             for (var i = 0; i < contacts[r].phoneNumbers.length; i++) {
                 if (contacts[r].phoneNumbers.length > 1) {
-                    p.innerHTML += "<strong>Phone Number " + (i + 1) + ":</strong> " + contacts[r].phoneNumbers[i].value + "<br>";
+                    p.innerHTML += "<strong>Phone " + (i + 1) + " (" + contacts[r].phoneNumbers[i].type + ")" + ":</strong> " + contacts[r].phoneNumbers[i].value + "<br>";
                 } else {
-                    p.innerHTML += "<strong>Phone Number:</strong> " + contacts[r].phoneNumbers[i].value + "<br>";
+                    p.innerHTML += "<strong>Phone:</strong> " + contacts[r].phoneNumbers[i].value + "<br>";
                 }
-            } // MAKE AN ORDER NUMBER FOR PHONE NUMBER
+            }
         } else {
-            p.innerHTML += "<strong>Phone Number:</strong> <small>No phone number on record.</small>" + "<br>";
+            p.innerHTML += "<strong>Phone:</strong> <small>No phone number on record.</small>" + "<br>";
         }
 
         if (contacts[r].emails != null) {
             for (var i = 0; i < contacts[r].emails.length; i++) {
-                p.innerHTML += "<strong>Email:</strong> " + contacts[r].emails[i].value + "<br>";
+                if (contacts[r].emails.length > 1) {
+                    p.innerHTML += "<strong>Email " + (i + 1) + ":</strong> " + contacts[r].emails[i].value + "<br>";
+                } else {
+                    p.innerHTML += "<strong>Email:</strong> " + contacts[r].emails[i].value + "<br>";
+                }
             }
         } else {
             p.innerHTML += "<strong>Email:</strong> <small>No email on record.</small>" + "<br>";
@@ -216,10 +228,10 @@ function onSuccess(contacts) {
         } else {
             p.innerHTML += "<strong>Address:</strong> <small>No address on record.</small>" + "<br>";
         }
-    } else{
+    } else {
         p.innerHTML = "No contacts found on phone."
     }
-        output3.appendChild(p);
+    output3.appendChild(p);
 
     //}
 }

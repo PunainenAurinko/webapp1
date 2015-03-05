@@ -8,12 +8,16 @@ var app1_tonk0006 = {
         app1_tonk0006.bindEvents();
     },
 bindEvents: function() {
-    document.addEventListener('deviceready', app1_tonk0006.onDeviceReady, false);
-    document.addEventListener("DOMContentLoaded", app1_tonk0006.onDeviceReady, false);
+    document.addEventListener('deviceready', this.onDeviceReady, false);
+    document.addEventListener("DOMContentLoaded", this.onDeviceReady, false);
     },
-
+    
+reportPosition: function(position) {
+    
+},
 onDeviceReady: function(){
-	//device ready listener
+	//devicre ready listener
+    alert("test");
 	pages = document.querySelectorAll('[data-role="page"]');	
 	numPages = pages.length;
 	links = document.querySelectorAll('[data-role="pagelink"]');
