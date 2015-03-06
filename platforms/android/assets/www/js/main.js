@@ -5,7 +5,6 @@ var numLinks = 0;
 var numPages = 0;
 
 document.addEventListener("DOMContentLoaded", function () {
-    //device ready listener
     pages = document.querySelectorAll('[data-role="page"]');
     numPages = pages.length;
     links = document.querySelectorAll('[data-role="pagelink"]');
@@ -88,15 +87,17 @@ function loadPage(url) {
     }
 }
 
-//Need a listener for the popstate event to handle the back button
+//A listener for the popstate event to handle the back button
 function browserBackButton(ev) {
     url = location.hash; //hash will include the "#"
     //update the visible div and the active tab
     for (var i = 0; i < numPages; i++) {
         if (("#" + pages[i].id) == url) {
             pages[i].style.display = "block";
+            pages[i].className = "active";
         } else {
-            pages[i].style.display = "none";
+            pages[i].className = "";
+            pages[i].style.display = "block";
         }
     }
     for (var t = 0; t < numLinks; t++) {
@@ -128,8 +129,8 @@ function reportPosition(position) {
     img.onload = function imageDraw() {
         context.drawImage(img, 0, 0, 327, 327);
     }
-    console.log(latitude);
-    console.log(longitude);
+    console.log("Latitude: " + latitude);
+    console.log("Longitude: " + longitude);
 }
 
 function gpsError(error) {
@@ -145,28 +146,33 @@ document.addEventListener("deviceready", onDeviceReady, false);
 
 function onDeviceReady() {
 
-    // Geolocation function call may also be located here
+    // Geolocation function call may also be located here, but left in DOMContentLoaded event for easier
+    // testing both on android devices and the browser
 
-    //    if(navigator.geolocation) { 
-    //        
-    //        var params = {enableHighAccuracy: true, timeout:30000, maximumAge:90000};
-    //    
-    //        navigator.geolocation.getCurrentPosition( reportPosition, gpsError, params ); 
-    //    
-    //    } else {
-    //    //browser does not support geolocation
-    //        alert("Sorry, but your phone does not support location based awesomeness.")
-    //    }
-    //    
+    //        if (navigator.geolocation) {
+    //
+    //            var params = {
+    //                enableHighAccuracy: true,
+    //                timeout: 30000,
+    //                maximumAge: 90000
+    //            };
+    //
+    //            navigator.geolocation.getCurrentPosition(reportPosition, gpsError, params);
+    //
+    //        } else {
+    //            //browser does not support geolocation
+    //            alert("Sorry, but your phone does not support location-based services.")
+    //        }
+
 
     //  Function to manually pick and display a contact from phone contacts app
 
-    //navigator.contacts.pickContact(function(contact){
-    //    var output3 = document.querySelector("#three");
-    //    var p = document.createElement("p");
-    //    p.innerHTML = 'The following contact has been selected:' + JSON.stringify(contact);
-    //    output3.appendChild(p);
-    //    },function(err){
+    //    navigator.contacts.pickContact(function (contact) {
+    //        var output3 = document.querySelector("#three");
+    //        var p = document.createElement("p");
+    //        p.innerHTML = 'The following contact has been selected:' + JSON.stringify(contact);
+    //        output3.appendChild(p);
+    //    }, function (err) {
     //        console.log('Error: ' + err);
     //    });
 
@@ -183,14 +189,14 @@ function onDeviceReady() {
 function onSuccess(contacts) {
     console.log(contacts);
     var r = Math.floor((Math.random() * contacts.length));
-    console.log("R =" + r);
+    console.log("Random contact: " + r);
     //for (var i = 0; i < contacts.length; i++) {
     var output3 = document.querySelector("#three");
     var p = document.createElement("p");
 
     if (contacts.length != 0) {
 
-        if (contacts[r].phoneNumbers != null && contacts[r].phoneNumbers) {
+        if (contacts[r].displayName != null) {
             p.innerHTML = "<strong>Contact's Name:</strong> " + contacts[r].displayName + "<br>";
         } else {
             p.innerHTML += "<strong>Contact's Name:</strong> <small>No name on record.<small>" + "<br>";
