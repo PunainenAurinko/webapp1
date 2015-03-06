@@ -1,10 +1,13 @@
-// JavaScript Document
+// Global variables
+
 var pages = [],
     links = [];
 var numLinks = 0;
 var numPages = 0;
 var latitude,
     longitude;
+
+// Add DOMContentLoaded listener
 
 document.addEventListener("DOMContentLoaded", function () {
     pages = document.querySelectorAll('[data-role="page"]');
@@ -110,12 +113,15 @@ function browserBackButton(ev) {
     }
 }
 
-//Test for browser support of touch events
+// Test for browser support of touch events
+
 function detectTouchSupport() {
     msGesture = navigator && navigator.msPointerEnabled && navigator.msMaxTouchPoints > 0 && MSGesture;
     var touchSupport = (("ontouchstart" in window) || msGesture || (window.DocumentTouch && document instanceof DocumentTouch));
     return touchSupport;
 }
+
+// Get location coordinates and display a map on canvas tag with a marker in the center
 
 function findCoordinates(position) {
     latitude = position.coords.latitude;
@@ -146,7 +152,7 @@ function gpsError(error) {
     alert("Error: " + errors[error.code]);
 }
 
-// Get human-readable street address based on the found coordinates
+// Get and display human-readable street address based on the found coordinates
 
 function findStreetAddress() {
     var geocoder = new google.maps.Geocoder();
@@ -166,6 +172,8 @@ function findStreetAddress() {
         }
     });
 }
+
+// Add deviceready listener
 
 document.addEventListener("deviceready", onDeviceReady, false);
 
@@ -193,8 +201,7 @@ function onDeviceReady() {
     navigator.contacts.find(filter, onSuccess, onError, options);
 }
 
-// onSuccess: Pick and display a random contact out of all device contacts
-
+// Pick and display a random contact out of all device contacts
 
 function onSuccess(contacts) {
     console.log(contacts);
@@ -252,7 +259,7 @@ function onSuccess(contacts) {
     //}
 }
 
-// onError: Failed to get the contacts
+// Failed to get the contacts
 
 function onError(contactError) {
     alert("Error!");
