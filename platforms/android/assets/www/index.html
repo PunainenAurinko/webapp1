@@ -1,50 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Web App 1</title>
     <link href='http://fonts.googleapis.com/css?family=Antic+Didone|Julius+Sans+One' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="css/main.css">
-    
+
 </head>
 
 <body>
 
-<!-- application title bar -->
-<header class="apptitle">
-  <h1>Web App One</h1>
-</header>
-<!-- tabbed navigation bar -->
-<nav class="tabs">
-  <ul>
-    <li class="li-1-3"><a href="#home" data-role="pagelink" class="activetab"><img src="img/house.svg">Home</a></li>
-    <li class="li-1-3"><a href="#two" data-role="pagelink"><img src="img/map.svg">Location</a></li>
-    <li class="li-1-3"><a href="#three" data-role="pagelink"><img src="img/contact.svg">Contact</a></li>
-  </ul>
-</nav>
+    <!-- application title bar -->
+    <header class="apptitle">
+        <h1>Web App One</h1>
+    </header>
+    <!-- tabbed navigation bar -->
+    <nav class="tabs">
+        <ul>
+            <li class="li-1-3">
+                <a href="#home" data-role="pagelink" class="activetab"><img src="img/house.svg">Home</a>
+            </li>
+            <li class="li-1-3">
+                <a href="#two" data-role="pagelink"><img src="img/map.svg">Location</a>
+            </li>
+            <li class="li-1-3">
+                <a href="#three" data-role="pagelink"><img src="img/contact.svg">Contact</a>
+            </li>
+        </ul>
+    </nav>
 
-<section data-role="page" id="home" class="active animation-slide-in-right">
-    <h2>The Amazing Do-it-all App</h2>
-    <p>You should always use this app no matter what you do, this app is that amazing! It can read for you, it can sing for you, it can cook for you, it can be an extension of your life, for ever!</p>
-<!--
-    <p>McSweeney's try-hard Thundercats pop-up, ethical 8-bit forage. Small batch occaecat drinking vinegar, Tumblr iPhone single-origin coffee dolor id cornhole. Jean shorts kale chips elit Godard, normcore fanny pack sustainable veniam pickled iPhone Tumblr cred mixtape retro stumptown. Tumblr ethical aute, Wes Anderson pariatur hella retro. Brooklyn XOXO bitters fashion axe VHS, meh seitan labore. Cornhole squid duis tote bag. Chia gluten-free scenester put a bird on it ennui Portland.</p>
-    <p>Bespoke cardigan meh Pinterest Etsy. Lumbersexual beard street art mlkshk lo-fi sed blog, cold-pressed tattooed polaroid Vice in. Put a bird on it anim cliche nulla, Banksy Wes Anderson McSweeney's sed magna plaid eu. Letterpress meggings four loko keytar, hella polaroid do paleo migas culpa banh mi food truck proident blog. Dolor vinyl viral, incididunt pariatur Etsy YOLO Blue Bottle adipisicing pug blog. Meditation whatever mustache reprehenderit dolor, mumblecore you probably haven't heard of them shabby chic ethical pariatur narwhal squid. Typewriter drinking vinegar McSweeney's, 8-bit forage esse Pitchfork.</p>
--->
-</section>
-<section data-role="page" id="two">
-    <h2>Your exact location</h2>
-    <p>We have found you here:</p>
-</section>
-<section data-role="page" id="three">
-    <h2>Contact Details</h2>
-    <p>We have picked this contact just for you. Don't hesitate, call them today!</p>
-    </br>
-</section>
+    <section data-role="page" id="home" class="active">
+        <h2>The Amazing Do-it-all App</h2>
+        <p>You should always use this app no matter what you do, this app is that amazing! It can read for you, it can sing for you, it can cook for you, it can be an extension of your life, for ever!</p>
+        <p>On a serious note, the app gives you your exact location on a map and as a street address on its second page, and picks a random contact from your phone's contact list on its third page.</p>
+    </section>
+    <section data-role="page" id="two">
+        <h2>Your exact location</h2>
+        <p>We have found you here:</p>
+    </section>
+    <section data-role="page" id="three">
+        <h2>Contact Details</h2>
+        <p>We have picked this contact just for you. Don't hesitate, call them today!</p>
+        </br>
+    </section>
 
 </body>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDP68CXSK9TynSN4n_Moo7PPakL8SQM0xk">
+</script>
+<script src="cordova.js"></script>
+<script src="js/main.js"></script>
 
-    <script src="cordova.js"></script>
-    <script src="js/main.js"></script>
-        
 </html>

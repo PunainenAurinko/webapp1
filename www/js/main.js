@@ -3,6 +3,8 @@ var pages = [],
     links = [];
 var numLinks = 0;
 var numPages = 0;
+var latitude,
+    longitude;
 
 document.addEventListener("DOMContentLoaded", function () {
     pages = document.querySelectorAll('[data-role="page"]');
@@ -28,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
             maximumAge: 90000
         };
 
-        navigator.geolocation.getCurrentPosition(reportPosition, gpsError, params);
+        navigator.geolocation.getCurrentPosition(findCoordinates, gpsError, params);
 
     } else {
         //browser does not support geolocation
@@ -115,9 +117,9 @@ function detectTouchSupport() {
     return touchSupport;
 }
 
-function reportPosition(position) {
-    var latitude = position.coords.latitude;
-    var longitude = position.coords.longitude;
+function findCoordinates(position) {
+    latitude = position.coords.latitude;
+    longitude = position.coords.longitude;
     var canvas = document.createElement("canvas");
     canvas.width = 327;
     canvas.height = 327;
@@ -131,6 +133,8 @@ function reportPosition(position) {
     }
     console.log("Latitude: " + latitude);
     console.log("Longitude: " + longitude);
+
+    findStreetAddress()
 }
 
 function gpsError(error) {
@@ -142,30 +146,36 @@ function gpsError(error) {
     alert("Error: " + errors[error.code]);
 }
 
+// Get human-readable street address based on the found coordinates
+
+function findStreetAddress() {
+    var geocoder = new google.maps.Geocoder();
+    var latlng = new google.maps.LatLng(latitude, longitude);
+    geocoder.geocode({
+        'latLng': latlng
+    }, function (results, status) {
+        console.log(google.maps.GeocoderStatus);
+        if (status == google.maps.GeocoderStatus.OK) {
+            console.log(results[1].formatted_address);
+            var h2 = document.createElement("h2");
+            h2.innerHTML = "<small>" + results[1].formatted_address + "</small>";
+            var output2 = document.querySelector("#two");
+            output2.appendChild(h2);
+        } else {
+            alert("Geocoder failed due to: " + status);
+        }
+    });
+}
+
 document.addEventListener("deviceready", onDeviceReady, false);
 
 function onDeviceReady() {
 
-    // Geolocation function call may also be located here, but left in DOMContentLoaded event for easier
-    // testing both on android devices and the browser
-
-    //        if (navigator.geolocation) {
-    //
-    //            var params = {
-    //                enableHighAccuracy: true,
-    //                timeout: 30000,
-    //                maximumAge: 90000
-    //            };
-    //
-    //            navigator.geolocation.getCurrentPosition(reportPosition, gpsError, params);
-    //
-    //        } else {
-    //            //browser does not support geolocation
-    //            alert("Sorry, but your phone does not support location-based services.")
-    //        }
+    // Geolocation function call may also be located here, but left in DOMContentLoaded event for easier testing both on android devices and the browser
 
 
-    //  Function to manually pick and display a contact from phone contacts app
+    // Working function to manually pick and display a contact from phone contacts app
+    // Was used for testing whether cordova.js was working properly on the phone 
 
     //    navigator.contacts.pickContact(function (contact) {
     //        var output3 = document.querySelector("#three");
@@ -245,5 +255,5 @@ function onSuccess(contacts) {
 // onError: Failed to get the contacts
 
 function onError(contactError) {
-    alert('onError!');
+    alert("Error!");
 }
