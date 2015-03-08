@@ -39,6 +39,14 @@ h2 {
     font-family: 'Julius Sans One', "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+h4 {
+    font-family: 'Julius Sans One', "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #b5a4ac;
+    font-size: 1.4rem;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
 p {
     font-size: 1.2rem;
     line-height: 2;

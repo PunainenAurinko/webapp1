@@ -21,9 +21,13 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         links[i].addEventListener("click", handleNav, false);
     }
-    //add the listener for the back button
+    
+    // Listener for the back button
+    
     window.addEventListener("popstate", browserBackButton, false);
     loadPage(null);
+    
+    // Geolocation function call
 
     if (navigator.geolocation) {
 
@@ -42,7 +46,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
-//handle the touchend event
+// Handle the touchend event
+
 function handleTouch(ev) {
     ev.preventDefault();
     ev.stopImmediatePropagation();
@@ -54,7 +59,8 @@ function handleTouch(ev) {
     //send the touch to the click handler
 }
 
-//handle the click event
+// Handle the click event
+
 function handleNav(ev) {
     ev.preventDefault();
     var href = ev.currentTarget.href;
@@ -64,7 +70,8 @@ function handleNav(ev) {
     return false;
 }
 
-//Deal with history API and switching divs
+// Deal with history API and switching divs, and enable transitions
+
 function loadPage(url) {
     if (url == null) {
         //home page first call
@@ -80,7 +87,6 @@ function loadPage(url) {
             } else {
                 pages[i].className = "";
                 pages[i].style.display = "block";
-
             }
         }
         for (var t = 0; t < numLinks; t++) {
@@ -92,7 +98,8 @@ function loadPage(url) {
     }
 }
 
-//A listener for the popstate event to handle the back button
+// Listener for the popstate event to handle the back button
+
 function browserBackButton(ev) {
     url = location.hash; //hash will include the "#"
     //update the visible div and the active tab
@@ -121,27 +128,19 @@ function detectTouchSupport() {
     return touchSupport;
 }
 
-// Get location coordinates and display a map on canvas tag with a marker in the center
+// Get location coordinates
 
 function findCoordinates(position) {
     latitude = position.coords.latitude;
     longitude = position.coords.longitude;
-    var canvas = document.createElement("canvas");
-    canvas.width = 327;
-    canvas.height = 327;
-    var output = document.querySelector("#two");
-    output.appendChild(canvas);
-    var context = canvas.getContext("2d");
-    var img = document.createElement("img");
-    img.src = "https://maps.googleapis.com/maps/api/staticmap?center=" + latitude + "," + longitude + "&zoom=16&size=400x400&scale=2&maptype=hybrid&language=english&markers=color:white|" + latitude + "," + longitude + "&key=AIzaSyDP68CXSK9TynSN4n_Moo7PPakL8SQM0xk";
-    img.onload = function imageDraw() {
-        context.drawImage(img, 0, 0, 327, 327);
-    }
+
     console.log("Latitude: " + latitude);
     console.log("Longitude: " + longitude);
 
     findStreetAddress()
 }
+
+// Handle error messages for findCoordinates function
 
 function gpsError(error) {
     var errors = {
@@ -160,17 +159,40 @@ function findStreetAddress() {
     geocoder.geocode({
         'latLng': latlng
     }, function (results, status) {
-        console.log(google.maps.GeocoderStatus);
+        console.log(results);
+        console.log("Reverse Geocoding status: " + status);
         if (status == google.maps.GeocoderStatus.OK) {
-            console.log(results[1].formatted_address);
-            var h2 = document.createElement("h2");
-            h2.innerHTML = "<small>" + results[1].formatted_address + "</small>";
+            console.log("Address 0: " + results[0].formatted_address);
+            console.log("Address 1: " + results[1].formatted_address);
+            var h4 = document.createElement("h4");
+                if (results[1].formatted_address.length > results[0].formatted_address.length)                        { 
+                    h4.innerHTML = "<small>" + results[1].formatted_address + "</small>";
+                } else {
+                h4.innerHTML = "<small>" + results[0].formatted_address + "</small>";
+                }
             var output2 = document.querySelector("#two");
-            output2.appendChild(h2);
+            output2.appendChild(h4);
+            displayMap();
         } else {
             alert("Geocoder failed due to: " + status);
         }
     });
+}
+
+// Diplay Google static map of current location with a marker in the centre
+
+function displayMap() {
+    var canvas = document.createElement("canvas");
+    canvas.width = 327;
+    canvas.height = 327;
+    var output = document.querySelector("#two");
+    output.appendChild(canvas);
+    var context = canvas.getContext("2d");
+    var img = document.createElement("img");
+    img.src = "https://maps.googleapis.com/maps/api/staticmap?center=" + latitude + "," + longitude + "&zoom=16&size=400x400&scale=2&maptype=hybrid&language=english&markers=color:white|" + latitude + "," + longitude + "&key=AIzaSyDP68CXSK9TynSN4n_Moo7PPakL8SQM0xk";
+    img.onload = function imageDraw() {
+        context.drawImage(img, 0, 0, 327, 327);
+    }
 }
 
 // Add deviceready listener
@@ -179,7 +201,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 
 function onDeviceReady() {
 
-    // Geolocation function call may also be located here, but left in DOMContentLoaded event for easier testing both on android devices and the browser
+    /* Geolocation function call may also be located here, but left in DOMContentLoaded event for easier testing both on android devices and the browser */
 
 
     // Working function to manually pick and display a contact from phone contacts app
@@ -202,6 +224,9 @@ function onDeviceReady() {
 }
 
 // Pick and display a random contact out of all device contacts
+// If no contacts on phone, a respective message will be displayed
+// Display contact's name, phone number, email and address if available
+// If something of the above is not available, a respective message will be displayed
 
 function onSuccess(contacts) {
     console.log(contacts);
