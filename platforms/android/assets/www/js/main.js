@@ -159,7 +159,7 @@ function findStreetAddress() {
     geocoder.geocode({
         'latLng': latlng
     }, function (results, status) {
-        console.log(results);
+        console.log("Geocoding results array: " + results);
         console.log("Reverse Geocoding status: " + status);
         if (status == google.maps.GeocoderStatus.OK) {
             console.log("Address 0: " + results[0].formatted_address);
@@ -229,7 +229,7 @@ function onDeviceReady() {
 // If something of the above is not available, a respective message will be displayed
 
 function onSuccess(contacts) {
-    console.log(contacts);
+    console.log("Contacts array: " + contacts);
     var r = Math.floor((Math.random() * contacts.length));
     console.log("Random contact: " + r);
     //for (var i = 0; i < contacts.length; i++) {
