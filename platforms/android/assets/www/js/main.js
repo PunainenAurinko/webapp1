@@ -21,12 +21,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         links[i].addEventListener("click", handleNav, false);
     }
-    
+
     // Listener for the back button
-    
+
     window.addEventListener("popstate", browserBackButton, false);
     loadPage(null);
-    
+
     // Geolocation function call
 
     if (navigator.geolocation) {
@@ -64,8 +64,8 @@ function handleTouch(ev) {
 function handleNav(ev) {
     ev.preventDefault();
     var href = ev.currentTarget.href;
-    console.log(href);
     var parts = href.split("#");
+    console.log("Clicked: page " + parts[1]);
     loadPage(parts[1]);
     return false;
 }
@@ -134,6 +134,7 @@ function findCoordinates(position) {
     latitude = position.coords.latitude;
     longitude = position.coords.longitude;
 
+    console.log("\n\tCOORDINATES:");
     console.log("Latitude: " + latitude);
     console.log("Longitude: " + longitude);
 
@@ -151,7 +152,9 @@ function gpsError(error) {
     alert("Error: " + errors[error.code]);
 }
 
-// Get and display human-readable street address based on the found coordinates
+// Get and display human-readable street address based on the found coordinates using Google Maps JavaScript API v3 Reverse Geocoding process
+
+// Full street address is transmitted interchengeably either in results[0].formatted_address or in results[1].formatted_address, therefore the inner if statement is used to pick between them
 
 function findStreetAddress() {
     var geocoder = new google.maps.Geocoder();
@@ -159,19 +162,20 @@ function findStreetAddress() {
     geocoder.geocode({
         'latLng': latlng
     }, function (results, status) {
+        console.log("\n\tGEOCODING:");
+        console.log("Geocoding status: " + status);
         console.log(results);
-        console.log("Reverse Geocoding status: " + status);
         if (status == google.maps.GeocoderStatus.OK) {
             console.log("Address 0: " + results[0].formatted_address);
-            console.log("Address 1: " + results[1].formatted_address);
+            console.log("Address 1: " + results[1].formatted_address + "\n");
             var h4 = document.createElement("h4");
-                if (results[1].formatted_address.length > results[0].formatted_address.length)                        { 
-                    h4.innerHTML = "<small>" + results[1].formatted_address + "</small>";
-                } else {
+            if (results[1].formatted_address.length > results[0].formatted_address.length) {
+                h4.innerHTML = "<small>" + results[1].formatted_address + "</small>";
+            } else {
                 h4.innerHTML = "<small>" + results[0].formatted_address + "</small>";
-                }
-            var output2 = document.querySelector("#two");
-            output2.appendChild(h4);
+            }
+            var output1 = document.querySelector("#two");
+            output1.appendChild(h4);
             displayMap();
         } else {
             alert("Geocoder failed due to: " + status);
@@ -179,19 +183,21 @@ function findStreetAddress() {
     });
 }
 
-// Diplay Google static map of current location with a marker in the centre
+// Diplay Google static map of current location with a marker in the centre using Google Statis Map API
+// Visible map width is taken as 91.5% of device screen width
 
 function displayMap() {
     var canvas = document.createElement("canvas");
-    canvas.width = 327;
-    canvas.height = 327;
-    var output = document.querySelector("#two");
-    output.appendChild(canvas);
+    var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+    canvas.width = width;
+    canvas.height = width;
+    var output2 = document.querySelector("#two");
+    output2.appendChild(canvas);
     var context = canvas.getContext("2d");
     var img = document.createElement("img");
-    img.src = "https://maps.googleapis.com/maps/api/staticmap?center=" + latitude + "," + longitude + "&zoom=16&size=400x400&scale=2&maptype=hybrid&language=english&markers=color:white|" + latitude + "," + longitude + "&key=AIzaSyDP68CXSK9TynSN4n_Moo7PPakL8SQM0xk";
+    img.src = "https://maps.googleapis.com/maps/api/staticmap?center=" + latitude + "," + longitude + "&zoom=17&size=" + width + "x" + width + "&scale=2&maptype=hybrid&language=english&markers=color:white|" + latitude + "," + longitude + "&key=AIzaSyDP68CXSK9TynSN4n_Moo7PPakL8SQM0xk";
     img.onload = function imageDraw() {
-        context.drawImage(img, 0, 0, 327, 327);
+        context.drawImage(img, 0, 0, (width*0.915), (width*0.915));
     }
 }
 
@@ -229,6 +235,7 @@ function onDeviceReady() {
 // If something of the above is not available, a respective message will be displayed
 
 function onSuccess(contacts) {
+    console.log("\n\tCONTACTS:");
     console.log(contacts);
     var r = Math.floor((Math.random() * contacts.length));
     console.log("Random contact: " + r);
