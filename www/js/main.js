@@ -183,21 +183,21 @@ function findStreetAddress() {
     });
 }
 
-// Diplay Google static map of current location with a marker in the centre using Google Statis Map API
+// Diplay Google static map of current location with a marker in the centre using Google Maps Staticdev API
 // Visible map width is taken as 91.5% of device screen width
 
 function displayMap() {
     var canvas = document.createElement("canvas");
     var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
-    canvas.width = width;
-    canvas.height = width;
+    canvas.width = (width*0.891);
+    canvas.height = (width*0.891);
     var output2 = document.querySelector("#two");
     output2.appendChild(canvas);
     var context = canvas.getContext("2d");
     var img = document.createElement("img");
     img.src = "https://maps.googleapis.com/maps/api/staticmap?center=" + latitude + "," + longitude + "&zoom=17&size=" + width + "x" + width + "&scale=2&maptype=hybrid&language=english&markers=color:white|" + latitude + "," + longitude + "&key=AIzaSyDP68CXSK9TynSN4n_Moo7PPakL8SQM0xk";
     img.onload = function imageDraw() {
-        context.drawImage(img, 0, 0, (width*0.915), (width*0.915));
+        context.drawImage(img, 0, 0, (width*0.891), (width*0.891));
     }
 }
 
